@@ -1,0 +1,39 @@
+{
+  "name": "whatcha-doin",
+  "version": "0.0.1",
+  "description": "Keeps track of what your doing by asking you",
+  "main": "src/boot.js",
+  "author": "Eric Anderson",
+  "license": "Unlicense",
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "electron-prebuilt-compile": "^1.6.2",
+    "timekeeper": "^1.0.0"
+  },
+  "dependencies": {
+    "nedb": "^1.8.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "ava"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
+  "babel": {
+    "presets": [
+      "@ava/stage-4",
+      "react"
+    ],
+    "plugins": [
+      "transform-class-properties"
+    ]
+  }
+}

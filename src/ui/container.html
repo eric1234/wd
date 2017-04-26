@@ -1,0 +1,15 @@
+<html>
+<head></head>
+
+<body>
+  <script type="application/javascript">
+    import React from 'react'
+    import ReactDOM from 'react-dom'
+
+    function render(path) {
+      let Component = require(path).default
+      ReactDOM.render(<Component />, document.getElementsByTagName('body')[0])
+    }
+  </script>
+</body>
+</html>

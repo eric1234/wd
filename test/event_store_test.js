@@ -28,21 +28,21 @@ test('insert', t => {
 
     t.is(events[0]['type'], 'activity')
     t.is(events[0]['value'], 'email')
-    t.is(events[0]['created_at'].toString(), new Date(2017, 4, 24, 7).toString())
+    t.deepEqual(events[0]['created_at'], new Date(2017, 4, 24, 7))
 
     t.is(events[1]['type'], 'activity')
     t.is(events[1]['value'], 'wd development')
-    t.is(events[1]['created_at'].toString(), new Date(2017, 4, 24, 7, 30).toString())
+    t.deepEqual(events[1]['created_at'], new Date(2017, 4, 24, 7, 30))
 
     t.is(events[2]['type'], 'idle')
-    t.is(events[2]['created_at'].toString(), new Date(2017, 4, 24, 11, 15).toString())
+    t.deepEqual(events[2]['created_at'], new Date(2017, 4, 24, 11, 15))
 
     t.is(events[3]['type'], 'activity')
     t.is(events[3]['value'], 'wd development')
-    t.is(events[3]['created_at'].toString(), new Date(2017, 4, 24, 12, 30).toString())
+    t.deepEqual(events[3]['created_at'], new Date(2017, 4, 24, 12, 30))
 
     t.is(events[4]['type'], 'idle')
-    t.is(events[4]['created_at'].toString(), new Date(2017, 4, 24, 16, 30).toString())
+    t.deepEqual(events[4]['created_at'], new Date(2017, 4, 24, 16, 30))
   })
 })
 
@@ -85,6 +85,6 @@ test('activity retrieval', t => {
 
     t.is(events[0]['type'], 'activity')
     t.is(events[0]['value'], 'wd development')
-    t.is(events[0]['created_at'].toString(), new Date(2017, 4, 23, 7).toString())
+    t.deepEqual(events[0]['created_at'], new Date(2017, 4, 23, 7))
   });
 })

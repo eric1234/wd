@@ -1,5 +1,5 @@
 import test from 'ava'
-import report from '../src/report'
+import report from '../src/models/report'
 
 test('creating sessions from events', t => {
   let events = [

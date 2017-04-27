@@ -1,12 +1,9 @@
-import { event_store } from '../event_store/instance'
 import React from 'react'
 
 export default class extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {events: []}
-    event_store.events_for(new Date()).then(events => this.setState({events: events}))
   }
 
   render() {

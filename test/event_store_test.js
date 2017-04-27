@@ -1,7 +1,7 @@
 import test from 'ava'
 import tk from 'timekeeper'
 
-import Db from '../src/event_store'
+import Db from '../src/models/event_store'
 
 test('insert', t => {
   let db = new Db()

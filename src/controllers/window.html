@@ -1,0 +1,18 @@
+<html>
+<head></head>
+
+<body>
+  <script type="application/javascript">
+    import React from 'react'
+    import ReactDOM from 'react-dom'
+    import { ipcRenderer as ipc, remote } from 'electron'
+
+    ipc.on('window:render', (event, view) => {
+      let Component = require(`${__dirname}/../views/${view}`).default
+      let component = ReactDOM.render(<Component />, document.getElementsByTagName('body')[0])
+      ipc.on('window:set-state', (event, state) => component.setState(state))
+      event.sender.send(`window:rendered:${remote.getCurrentWindow().id}`)
+    })
+  </script>
+</body>
+</html>

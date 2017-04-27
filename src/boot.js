@@ -1,3 +1,2 @@
-import './ui/tray'
-import './ui/prompt'
-import './clock'
+import './controllers/tray'
+import './models/clock'

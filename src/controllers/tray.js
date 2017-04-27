@@ -4,7 +4,7 @@ import Report from './report'
 
 class _Tray extends Tray {
   constructor() {
-    super(`${__dirname}/icon.png`)
+    super(`${__dirname}/../icon.png`)
     this.setContextMenu(Menu.buildFromTemplate([
       { label: 'Update', click: () => prompt.ask() },
       { label: 'Report', click: () => new Report() },

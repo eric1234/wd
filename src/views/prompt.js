@@ -1,5 +1,4 @@
-import { remote, ipcRenderer as ipc } from 'electron'
-import { event_store } from '../event_store/instance'
+import { ipcRenderer as ipc } from 'electron'
 import React from 'react'
 
 export default class extends React.Component {
@@ -7,12 +6,9 @@ export default class extends React.Component {
     super(props);
 
     this.state = {value: ''}
-    event_store.last_activity().then(value => this.setState({value: value}))
 
     this.update = this.update.bind(this)
     this.submit = this.submit.bind(this)
-
-    ipc.on('prompt:idle', () => this.idle() )
   }
 
   styles = {
@@ -35,12 +31,6 @@ export default class extends React.Component {
 
   submit(event) {
     event.preventDefault()
-    ipc.send('prompt:idle-cancel')
-    event_store.insert_activity(this.state.value)
-    remote.getCurrentWindow().hide()
-  }
-
-  idle() {
-    event_store.insert_idle()
+    ipc.send('prompt:submit', this.state.value)
   }
 }

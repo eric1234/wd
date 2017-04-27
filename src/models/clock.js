@@ -1,4 +1,4 @@
-import { prompt } from './ui/prompt'
+import { prompt } from '../controllers/prompt'
 
 class Clock {
   constructor() {

@@ -23,7 +23,21 @@ export default function(events) {
       sessions.push(current)
     }
   })
-  if( current ) { current.end = current.start }
+
+  // The date didn't end in idle. If still today then use the current time.
+  // If a past day then treat the duration as 0
+  if( current ) {
+    let now = new Date()
+    if(
+      current.start.getFullYear() == now.getFullYear() &&
+      current.start.getMonth() == now.getMonth() &&
+      current.start.getDate() == now.getDate()
+    ) {
+      current.end = now
+    } else {
+      current.end = current.start
+    }
+  }
 
   return sessions.reduce((memo, session) => {
     memo[session.name] = memo[session.name] || 0

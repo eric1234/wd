@@ -1,6 +1,7 @@
 import { app, ipcMain as ipc } from 'electron'
 import Window from './window'
 import { event_store } from '../models/event_store/instance'
+import report from '../models/report'
 
 export default class extends Window {
   constructor() {
@@ -14,6 +15,6 @@ export default class extends Window {
   }
 
   initialize() {
-    event_store.events_for(new Date()).then(events => this.setState({events: events}))
+    event_store.events_for(new Date()).then(events => this.setState({events: report(events)}))
   }
 }

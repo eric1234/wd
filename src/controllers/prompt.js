@@ -17,9 +17,8 @@ class Prompt extends Window {
       icon: `${__dirname}/../icon.png`,
     })
     this.setMenu(null)
-    //this.webContents.openDevTools()
 
-    this.on('close', () => this.suppress_close());
+    this.on('close', (event) => this.suppress_close(event));
     ipc.on('prompt:submit', (event, value) => this.submit(value))
   }
 
@@ -47,7 +46,7 @@ class Prompt extends Window {
   suppress_close(event) {
     if( !quit_app ) {
       event.preventDefault()
-      prompt.hide()
+      this.hide()
     }
   }
 

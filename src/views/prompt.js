@@ -1,14 +1,10 @@
-import { ipcRenderer as ipc } from 'electron'
+import Window from './window'
 import React from 'react'
 
-export default class extends React.Component {
+export default class extends Window {
   constructor(props) {
     super(props);
-
     this.state = {value: ''}
-
-    this.update = this.update.bind(this)
-    this.submit = this.submit.bind(this)
   }
 
   styles = {
@@ -19,8 +15,8 @@ export default class extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.submit} id="prompt">
-        <input type="text" value={this.state.value} onChange={this.update} style={this.styles} />
+      <form onSubmit={event => this.submit(event)} id="prompt">
+        <input type="text" value={this.state.value} onChange={event => this.update(event)} style={this.styles} />
       </form>
     )
   }
@@ -31,6 +27,6 @@ export default class extends React.Component {
 
   submit(event) {
     event.preventDefault()
-    ipc.send('prompt:submit', this.state.value)
+    this.send('prompt:submit', this.state.value)
   }
 }

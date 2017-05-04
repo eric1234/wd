@@ -48,4 +48,10 @@ export default class {
       cursor.exec((err, docs) => err ? reject(err) : resolve(docs))
     })
   }
+
+  has_events(date) {
+    return new Promise((resolve, reject) => {
+      this.events_for(date).then((events) => resolve(events.length > 0)).catch(reject)
+    })
+  }
 }

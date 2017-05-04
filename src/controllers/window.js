@@ -8,10 +8,14 @@ export default class extends BrowserWindow {
     this.webContents.on('did-finish-load', event => {
       this.webContents.send('window:render', options['view'])
     })
-    this.loadURL(`file://${__dirname}/window.html`)
+    this.loadURL(`file://${__dirname}/../views/window.html`)
   }
 
   initialize() {}
+
+  receive(event, handler) {
+    ipc.on(event, (event, ...args) => handler.bind(this)(...args))
+  }
 
   setState(state) {
     this.webContents.send('window:set-state', state)

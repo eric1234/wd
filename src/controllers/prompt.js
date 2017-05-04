@@ -1,4 +1,4 @@
-import { app, ipcMain as ipc } from 'electron'
+import { app } from 'electron'
 import Window from './window'
 import { event_store } from '../models/event_store/instance'
 
@@ -19,7 +19,7 @@ class Prompt extends Window {
     this.setMenu(null)
 
     this.on('close', (event) => this.suppress_close(event));
-    ipc.on('prompt:submit', (event, value) => this.submit(value))
+    this.receive('prompt:submit', this.submit);
   }
 
   initialize() {

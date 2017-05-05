@@ -63,6 +63,8 @@ test('last activity is most recent item if activity', t => {
   tk.freeze(new Date(2017, 4, 23, 7))
   db.insert_activity('wd development')
 
+  tk.reset()
+
   return db.last_activity().then(activity => {
     t.is(activity, 'wd development')
   })
@@ -80,11 +82,75 @@ test('activity retrieval', t => {
   tk.freeze(new Date(2017, 4, 24, 7))
   db.insert_activity('cat videos')
 
+  tk.reset()
+
   return db.events_for(new Date(2017, 4, 23)).then(events => {
     t.is(events.length, 1)
 
     t.is(events[0]['type'], 'activity')
     t.is(events[0]['value'], 'wd development')
     t.deepEqual(events[0]['created_at'], new Date(2017, 4, 23, 7))
-  });
+  })
+})
+
+test('activity existance with no records is false', t => {
+  let db = new Db()
+  return db.has_events(new Date(2017, 5, 5)).then(bool => t.is(bool, false))
+})
+
+test('activity existance with records on another day is false', t => {
+  let db = new Db()
+
+  tk.freeze(new Date(2017, 4, 24, 7))
+  db.insert_activity('cat videos')
+
+  tk.reset()
+
+  return db.has_events(new Date(2017, 5, 5)).then(bool => t.is(bool, false))
+})
+
+test('activity existance with records today is true', t => {
+  let db = new Db()
+
+  tk.freeze(new Date(2017, 5, 5, 7))
+  db.insert_activity('cat videos')
+
+  tk.reset()
+
+  return db.has_events(new Date(2017, 5, 5)).then(bool => t.is(bool, true))
+})
+
+test('recent activity values', t => {
+  let db = new Db()
+
+  tk.freeze(new Date(2017, 5, 4, 8))
+  db.insert_activity('adog')
+
+  tk.freeze(new Date(2017, 5, 4, 12))
+  db.insert_activity('acat')
+
+  tk.freeze(new Date(2017, 5, 4, 16))
+  db.insert_activity('afoo')
+
+  tk.freeze(new Date(2017, 5, 4, 20))
+  db.insert_activity('abar')
+
+  tk.freeze(new Date(2017, 5, 5, 7))
+  db.insert_activity('afoo')
+
+  tk.freeze(new Date(2017, 5, 5, 7))
+  db.insert_activity('bfood')
+
+  tk.freeze(new Date(2017, 5, 5, 9))
+  db.insert_activity('abaz')
+
+  tk.reset()
+
+  return db.recent('a', 4).then(recent => t.deepEqual(recent, ['abaz', 'afoo', 'abar', 'acat']))
+})
+
+test('recent list when not enough values', t => {
+  let db = new Db()
+  db.insert_activity('foo')
+  return db.recent('').then(recent => t.deepEqual(recent, ['foo']))
 })

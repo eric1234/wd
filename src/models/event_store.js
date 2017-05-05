@@ -54,4 +54,28 @@ export default class {
       this.events_for(date).then((events) => resolve(events.length > 0)).catch(reject)
     })
   }
+
+  recent(prefix, limit=5) {
+    // NOTE: We don't use NeDB's LIMIT as it lacks a DISTINCT operator. Since
+    // We are filtering and only keep a few days of values it's ok to just load
+    // them all and filter here.
+    let query = {'type': 'activity', 'value': {$regex: new RegExp(`^${prefix}`)}}
+    let cursor = this.storage.find(query, {'value': 1}).sort({'created_at': -1})
+
+    return new Promise((resolve, reject) => {
+      cursor.exec((err, docs) => {
+        if( err ) return reject(err)
+
+        let results = new Set()
+        docs.some(doc => {
+          results.add(doc['value'])
+          if( results.size >= limit ) {
+            resolve(Array.from(results))
+            return true
+          }
+        })
+        resolve(Array.from(results))
+      })
+    })
+  }
 }

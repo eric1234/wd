@@ -20,7 +20,6 @@ class Prompt extends Window {
     })
     this.setMenu(null)
 
-    this.on('close', (event) => this.suppress_close(event))
     this.receive('prompt:submit', this.submit)
     this.receive('prompt:suggestions', this.load_suggestions)
 

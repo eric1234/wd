@@ -27,18 +27,10 @@ export default class extends Window {
   load() {
     let today = new Date();
     today.setHours(0,0,0,0)
-
-    let current = event_store.events_for(this.current)
-    let has_prev = event_store.has_events(this.date_offset(-1))
-
-    Promise.all([current, has_prev]).then(results => {
-      let today = new Date();
-      today.setHours(0,0,0,0)
-
+    event_store.events_for(this.current).then((events_today) => {
       this.setState({
-        events: report(results[0]),
+        events: report(events_today),
         date: this.current,
-        has_prev: results[1],
         has_next: this.current < today
       })
     })

@@ -93,33 +93,6 @@ test('activity retrieval', t => {
   })
 })
 
-test('activity existance with no records is false', t => {
-  let db = new Db()
-  return db.has_events(new Date(2017, 5, 5)).then(bool => t.is(bool, false))
-})
-
-test('activity existance with records on another day is false', t => {
-  let db = new Db()
-
-  tk.freeze(new Date(2017, 4, 24, 7))
-  db.insert_activity('cat videos')
-
-  tk.reset()
-
-  return db.has_events(new Date(2017, 5, 5)).then(bool => t.is(bool, false))
-})
-
-test('activity existance with records today is true', t => {
-  let db = new Db()
-
-  tk.freeze(new Date(2017, 5, 5, 7))
-  db.insert_activity('cat videos')
-
-  tk.reset()
-
-  return db.has_events(new Date(2017, 5, 5)).then(bool => t.is(bool, true))
-})
-
 test('recent activity values', t => {
   let db = new Db()
 

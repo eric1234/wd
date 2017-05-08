@@ -49,12 +49,6 @@ export default class {
     })
   }
 
-  has_events(date) {
-    return new Promise((resolve, reject) => {
-      this.events_for(date).then((events) => resolve(events.length > 0)).catch(reject)
-    })
-  }
-
   recent(prefix, limit=5) {
     // NOTE: We don't use NeDB's LIMIT as it lacks a DISTINCT operator. Since
     // We are filtering and only keep a few days of values it's ok to just load

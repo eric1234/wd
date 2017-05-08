@@ -19,9 +19,7 @@ export default class extends Window {
       <main>
         <h1>{this.state.date}</h1>
         <nav>
-          {this.state.has_prev &&
-            <a href="#" onClick={()=> this.go(-1)}>Prev</a>
-          }
+          <a href="#" onClick={()=> this.go(-1)}>Prev</a>
           {this.state.has_next &&
             <a href="#" onClick={()=> this.go(1)}>Next</a>
           }

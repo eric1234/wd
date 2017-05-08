@@ -1,22 +1,14 @@
-import { app, screen } from 'electron'
+import { app } from 'electron'
 import Window from './window'
 import { event_store } from '../models/event_store'
 import Clock from '../models/clock'
 
 class Prompt extends Window {
   constructor() {
-    const window_width = 600
-    const window_height = 300
-
-    // https://github.com/electron/electron/issues/3490#issuecomment-255568418
-    let bounds = screen.getPrimaryDisplay().bounds;
-    let x = bounds.x + ((bounds.width - window_width) / 2);
-    let y = bounds.y + ((bounds.height - window_height) / 2);
-
     super({
       view: './prompt', show: false, frame: false, alwaysOnTop: true,
-      x: x, y: y, width: window_width, height: window_height,
-      backgroundColor: '#F1EEF2', icon: `${__dirname}/../icon.png`,
+      center: true, width: 600, height: 300, backgroundColor: '#F1EEF2',
+      icon: `${__dirname}/../icon.png`,
     })
     this.setMenu(null)
 

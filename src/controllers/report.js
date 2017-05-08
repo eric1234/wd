@@ -5,10 +5,8 @@ import report from '../models/report'
 export default class extends Window {
   constructor() {
     super({
-      view: './report',
-      title: 'Time Spent',
-      backgroundColor: '#F1EEF2',
-      icon: `${__dirname}/icon.png`,
+      view: './report', title: 'Time Spent', center: true,
+      backgroundColor: '#F1EEF2', icon: `${__dirname}/icon.png`,
     })
     this.setMenu(null)
     this.receive('report:go', this.go)

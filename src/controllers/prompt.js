@@ -1,6 +1,6 @@
 import { app, screen } from 'electron'
 import Window from './window'
-import { event_store } from '../models/event_store/instance'
+import { event_store } from '../models/event_store'
 import Clock from '../models/clock'
 
 class Prompt extends Window {

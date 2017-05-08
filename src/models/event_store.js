@@ -1,6 +1,6 @@
 import Storage from 'nedb'
 
-export default class {
+export class EventStore {
   constructor(file=null) {
     this.storage = new Storage({
       filename: file,
@@ -73,3 +73,18 @@ export default class {
     })
   }
 }
+
+// http://stackoverflow.com/a/26227660/120067
+let data_dir =
+  // Windows
+  process.env.APPDATA ||
+  (
+    process.platform == 'darwin' ?
+      // Mac
+      process.env.HOME + '/Library/Preferences' :
+
+      // Linux
+      process.env.HOME + "/.local/share"
+  )
+
+export let event_store = new EventStore(`${data_dir}/events.db`)

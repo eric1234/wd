@@ -1,5 +1,5 @@
 import Window from './window'
-import { event_store } from '../models/event_store/instance'
+import { event_store } from '../models/event_store'
 import report from '../models/report'
 
 export default class extends Window {

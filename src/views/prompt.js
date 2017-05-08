@@ -15,19 +15,14 @@ export default class extends Window {
     this.suggestions = new Awesomplete(input, {autoFirst: true})
   }
 
-  styles = {
-    fontSize: '200%',
-    display: 'block',
-    width: '100%',
-  }
-
   render() {
     return (
       <main>
         <link rel="stylesheet" href="prompt/awesomplete.css" />
-        <style dangerouslySetInnerHTML={{__html: `.awesomplete { display: block }`}} />
+        <link rel="stylesheet" href="prompt.css" />
         <form onSubmit={event => this.submit(event)} id="prompt">
-          <input type="text" value={this.state.value} onChange={event => this.update(event)} style={this.styles} />
+          <label htmlFor="prompt">Whatcha doin?</label>
+          <input type="text" value={this.state.value} onChange={event => this.update(event)} id="prompt" />
         </form>
       </main>
     )

@@ -1,26 +1,31 @@
-import { app } from 'electron'
+import { app, screen } from 'electron'
 import Window from './window'
 import { event_store } from '../models/event_store/instance'
-
-// Note when the user indicates they really want to quit
-let quit_app = false;
-app.on('before-quit', () => quit_app = true);
+import Clock from '../models/clock'
 
 class Prompt extends Window {
   constructor() {
+    const window_width = 600
+    const window_height = 300
+
+    // https://github.com/electron/electron/issues/3490#issuecomment-255568418
+    let bounds = screen.getPrimaryDisplay().bounds;
+    let x = bounds.x + ((bounds.width - window_width) / 2);
+    let y = bounds.y + ((bounds.height - window_height) / 2);
+
     super({
-      view: './prompt',
-      width: 600, height: 300,
-      title: 'Whatcha Doin?',
-      show: false,
-      backgroundColor: '#F1EEF2',
-      icon: `${__dirname}/../icon.png`,
+      view: './prompt', show: false, frame: false, alwaysOnTop: true,
+      x: x, y: y, width: window_width, height: window_height,
+      backgroundColor: '#F1EEF2', icon: `${__dirname}/../icon.png`,
     })
     this.setMenu(null)
 
     this.on('close', (event) => this.suppress_close(event))
     this.receive('prompt:submit', this.submit)
     this.receive('prompt:suggestions', this.load_suggestions)
+
+    this.interrupter = new Clock(15)
+    this.idler = new Clock(1)
   }
 
   initialize() {
@@ -31,37 +36,23 @@ class Prompt extends Window {
   }
 
   ask() {
+    if( this.isVisible() ) return
+    this.interrupter.reset()
     this.show()
-    this.idle_timer = setTimeout(() => event_store.insert_idle(), 60*1000)
+    this.idler.start(() => event_store.insert_idle())
   }
 
   submit(value) {
-    this.cancel_idle()
-    event_store.insert_activity(value)
+    this.idler.reset()
     this.hide()
+    this.interrupter.start(() => this.ask())
+    event_store.insert_activity(value)
   }
 
   load_suggestions(value) {
     event_store.recent(value).then(recent => {
       this.webContents.send('prompt:suggestions', recent)
     })
-  }
-
-  // To keep this window fast in displaying it is always in existance. We just
-  // hide it when the user asks it to be closed. Only if the user had indicated
-  // they want to quit will we allow this window to be closed.
-  suppress_close(event) {
-    if( !quit_app ) {
-      event.preventDefault()
-      this.hide()
-    }
-  }
-
-  cancel_idle() {
-    if( this.idle_timer ) {
-      clearTimeout(this.idle_timer)
-      this.idle_timer = null
-    }
   }
 }
 

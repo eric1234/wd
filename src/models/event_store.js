@@ -87,4 +87,4 @@ let data_dir =
       process.env.HOME + "/.local/share"
   )
 
-export let event_store = new EventStore(`${data_dir}/events.db`)
+export let event_store = new EventStore(`${data_dir}/wd_events.db`)

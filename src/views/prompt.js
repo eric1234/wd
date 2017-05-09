@@ -13,10 +13,7 @@ export default class extends Window {
   initialize(document) {
     let input = document.querySelector('input')
     this.suggestions = new Awesomplete(input, {autoFirst: true})
-
-    // Ideally Awesomplete should just fire the change event but for now....
-    // https://github.com/LeaVerou/awesomplete/issues/16937
-    input.addEventListener('awesomplete-selectcomplete', event => this.setState({value: event.text.value}))
+    input.addEventListener('awesomplete-selectcomplete', event => this.autocomplete(event))
   }
 
   render() {
@@ -35,6 +32,11 @@ export default class extends Window {
   update(event) {
     this.setState({value: event.target.value})
     this.send('prompt:suggestions', this.state.value);
+  }
+
+  autocomplete(event) {
+    this.setState({value: event.text.value})
+    this.submit(event)
   }
 
   submit(event) {

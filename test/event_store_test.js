@@ -127,3 +127,18 @@ test('recent list when not enough values', t => {
   db.insert_activity('foo')
   return db.recent('').then(recent => t.deepEqual(recent, ['foo']))
 })
+
+test('can remove old events', t => {
+  let db = new Db()
+
+  tk.freeze(new Date(2017, 4, 3, 8))
+  db.insert_activity('foo')
+
+  tk.freeze(new Date(2017, 5, 3, 8))
+  db.insert_activity('bar')
+
+  return db.compact().then((removed) => {
+    t.is(removed, 1)
+    tk.reset()
+  })
+})

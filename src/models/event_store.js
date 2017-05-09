@@ -6,6 +6,7 @@ export class EventStore {
       filename: file,
       autoload: true
     })
+    this.compact()
   }
 
   insert_activity(value) {
@@ -69,6 +70,17 @@ export class EventStore {
           }
         })
         resolve(Array.from(results))
+      })
+    })
+  }
+
+  compact() {
+    let old = new Date()
+    old.setHours(0, 0, 0, 0)
+    old.setDate(old.getDate() - 10)
+    return new Promise((resolve, reject) => {
+      this.storage.remove({'created_at': {'$lt': old}}, {multi: true}, (err, removed) => {
+        err ? reject(err) : resolve(removed)
       })
     })
   }

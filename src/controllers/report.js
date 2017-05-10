@@ -23,13 +23,14 @@ export default class extends Window {
   }
 
   load() {
-    let today = new Date();
-    today.setHours(0,0,0,0)
-    event_store.events_for(this.current).then((events_today) => {
+    event_store.events_for(this.current).then((events) => {
+      let activities = report(events)
+      let total_time = Object.values(activities).reduce((total, duration) => total + duration, 0)
       this.setState({
-        events: report(events_today),
+        activities: activities,
+        total_time: total_time,
         date: this.current,
-        has_next: this.current < today
+        has_next: !this.is_today()
       })
     })
   }
@@ -37,5 +38,11 @@ export default class extends Window {
   date_offset(offset) {
     let one_day = 24 * 60 * 60 * 1000
     return new Date(this.current.getTime() + offset * one_day);
+  }
+
+  is_today() {
+    let today = new Date()
+    today.setHours(0,0,0,0)
+    return this.current >= today
   }
 }

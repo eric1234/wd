@@ -18,7 +18,9 @@ npm install
 Usage
 =====
 
-* Run app (`npm start`), it will prompt you for what you are doing. Tell it.
+* Run app. Currently this is done via `electron <path-to-code>`. Later we'll
+  get this as a standard desktop icon.
+* It will prompt you for what you are doing. Tell it.
 * When it prompts you again later, let it know if you are still working on the
   same thing (just hit `enter`) or enter something new.
 * If you don't answer it will assume you have stepped away and note the current
@@ -33,13 +35,26 @@ Usage
 
 To understand the reason for this work-flow see MOTIVATIONS.md.
 
+Development
+===========
+
+There is a test suite although it's just unit tests currently. I plan to add
+[Spectron](https://github.com/electron/spectron) tests for integration testing
+later. To run the test suite:
+
+    npm test
+
+Also to avoid development messing with your real data file you should launch
+the app via `npm start`. This will make the data file be the `events.db` file
+in the code directory instead of the normal location in your system profile.
+
 Cost and Licensing
 ==================
 
 "Whatcha Doin?" technically has been placed in the public domain to make license
 evaluation quick, easy and non-restrictive.
 
-BUT informally I like to think of it as
+BUT, informally I like to think of it as
 [Careware](https://en.wikipedia.org/wiki/Careware). I encourage the users
 to evaluate how useful it is to them and make an appropriate donation to the
 charity of their choice. If you do let me know. I would love to list the

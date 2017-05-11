@@ -18,7 +18,7 @@
     "react-dom": "^15.5.4"
   },
   "scripts": {
-    "start": "electron .",
+    "start": "DB=events.db electron .",
     "test": "ava"
   },
   "ava": {

@@ -112,4 +112,5 @@ export class EventStore {
 }
 
 // The singleton instance of the data store used by the reset of the app.
-export let event_store = new EventStore(`${data_dir()}/wd_events.db`)
+let path = process.env.DB || `${data_dir()}/wd_events.db`
+export let event_store = new EventStore(path)

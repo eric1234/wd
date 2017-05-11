@@ -1,14 +1,26 @@
 import Storage from 'nedb'
 
+/*
+ * Provides access to insert and query the data store for activity events.
+ * An abstraction over nedb to hide the storage implementation details.
+ *
+ * NOTE: The app uses a singleton instance of this (defined below). The only
+ * reason the class is exposed is for automated testing. I.E. the application
+ * should not be creating ad-hoc instances of this model. Use the singleton
+ * provided.
+ */
 export class EventStore {
+
+  /*
+   * Intialize an instance against the given file. The file is optional and if
+   * not provided will use an in-memory database useful for testing
+   */
   constructor(file=null) {
-    this.storage = new Storage({
-      filename: file,
-      autoload: true
-    })
+    this.storage = new Storage({filename: file, autoload: true})
     this.compact()
   }
 
+  // Indicate the activity the user is currently doing
   insert_activity(value) {
     this.storage.insert({
       type: 'activity',
@@ -17,10 +29,12 @@ export class EventStore {
     })
   }
 
+  // Indicates the user is now idle
   insert_idle() {
     this.storage.insert({type: 'idle', created_at: new Date()})
   }
 
+  // Get the last activity of the user. Result returned as a promise
   last_activity() {
     return new Promise((resolve, reject) => {
       let cursor = this.storage.find({type: 'activity'}).sort({'created_at': -1}).limit(1)
@@ -36,6 +50,7 @@ export class EventStore {
     })
   }
 
+  // Get all events (activity and idle) for the given day. Result is a promise
   events_for(date) {
     let start = new Date(date.getTime())
     start.setHours(0, 0, 0, 0)
@@ -50,6 +65,10 @@ export class EventStore {
     })
   }
 
+  /*
+   * Get the most recent activities (5 by default) that start with the given
+   * prefix. The result is a promise.
+   */
   recent(prefix, limit=5) {
     // NOTE: We don't use NeDB's LIMIT as it lacks a DISTINCT operator. Since
     // We are filtering and only keep a few days of values it's ok to just load
@@ -74,6 +93,11 @@ export class EventStore {
     })
   }
 
+  /*
+   * Removes historical activity records no longer needed. This isn't used
+   * explicitly in the application and is just exposed for testing purposes.
+   * It is automatically called whenever the data store is loaded.
+   */
   compact() {
     let old = new Date()
     old.setHours(0, 0, 0, 0)
@@ -99,4 +123,5 @@ let data_dir =
       process.env.HOME + "/.local/share"
   )
 
+// The singleton instance of the data store used by the reset of the app.
 export let event_store = new EventStore(`${data_dir}/wd_events.db`)

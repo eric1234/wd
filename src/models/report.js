@@ -1,13 +1,16 @@
+// A utility class to help process the report
 class Session {
-  constructor(name) {
-    this.name = name
-  }
-
-  duration() {
-    return Math.round((this.end - this.start) / 1000)
-  }
+  constructor(name) { this.name = name }
+  duration() { return Math.round((this.end - this.start) / 1000) }
 }
 
+/*
+ * This model is just a function that accepts a list of events (activity and
+ * idle) and returns a hash where the key is the activity label and the value
+ * is the duration (in seconds) of the time spent on that activity. If the
+ * Same activity occurs multiple times in the event listing they are coalesed
+ * and the durations summed as a single key/value pair.
+ */
 export default function(events) {
   let current;
   let sessions = [];

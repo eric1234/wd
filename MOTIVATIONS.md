@@ -3,7 +3,7 @@ motivations for why it was designed to work as it does.
 
 First I will say this method is limited to folks who spend their day mostly at
 the computer. There is the assumption that if you are not at the computer you
-are not working. If that isn't work job then this software is not for you.
+are not working. If that isn't your job then this software is not for you.
 
 Assume User Failure
 ===================

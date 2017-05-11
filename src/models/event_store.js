@@ -1,4 +1,5 @@
 import Storage from 'nedb'
+import data_dir from './data_dir'
 
 /*
  * Provides access to insert and query the data store for activity events.
@@ -110,18 +111,5 @@ export class EventStore {
   }
 }
 
-// http://stackoverflow.com/a/26227660/120067
-let data_dir =
-  // Windows
-  process.env.APPDATA ||
-  (
-    process.platform == 'darwin' ?
-      // Mac
-      process.env.HOME + '/Library/Preferences' :
-
-      // Linux
-      process.env.HOME + "/.local/share"
-  )
-
 // The singleton instance of the data store used by the reset of the app.
-export let event_store = new EventStore(`${data_dir}/wd_events.db`)
+export let event_store = new EventStore(`${data_dir()}/wd_events.db`)

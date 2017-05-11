@@ -1,19 +1,21 @@
 import Window from './window'
 import React from 'react'
 import Awesomplete from './prompt/awesomplete'
-import { ipcRenderer as ipc } from 'electron'
 
+// View component to render the prompt to the user
 export default class extends Window {
   constructor(props) {
     super(props);
     this.state = {value: ''}
-    ipc.on('prompt:suggestions', (event, suggestions) => this.suggestions.list = suggestions)
+    this.handle('suggestions')
+    this.bind('autocomplete', 'submit', 'update')
   }
 
+  // Initialize the awesomplete library
   initialize(document) {
     let input = document.querySelector('input')
     this.suggestions = new Awesomplete(input, {autoFirst: true})
-    input.addEventListener('awesomplete-selectcomplete', event => this.autocomplete(event))
+    input.addEventListener('awesomplete-selectcomplete', this.on_autocomplete)
   }
 
   render() {
@@ -21,26 +23,30 @@ export default class extends Window {
       <main>
         <link rel="stylesheet" href="prompt/awesomplete.css" />
         <link rel="stylesheet" href="prompt.css" />
-        <form onSubmit={event => this.submit(event)} id="prompt">
+        <form onSubmit={this.on_submit} id="prompt">
           <label htmlFor="prompt">Whatcha doin?</label>
-          <input type="text" value={this.state.value} onChange={event => this.update(event)} id="prompt" />
+          <input type="text" value={this.state.value} onChange={this.on_update} id="prompt" />
         </form>
       </main>
     )
   }
 
-  update(event) {
+  on_update(event) {
     this.setState({value: event.target.value})
-    this.send('prompt:suggestions', this.state.value);
+    this.send('suggestions', this.state.value);
   }
 
-  autocomplete(event) {
+  on_autocomplete(event) {
     this.setState({value: event.text.value})
     this.submit(event)
   }
 
-  submit(event) {
+  on_submit(event) {
     event.preventDefault()
-    this.send('prompt:submit', this.state.value)
+    this.send('submit', this.state.value)
+  }
+
+  on_suggestions(suggestions) {
+    this.suggestions = suggestions
   }
 }

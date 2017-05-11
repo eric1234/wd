@@ -9,7 +9,7 @@
 
     ipc.on('window:render', (event, view) => {
       let Component = require(`${__dirname}/../views/${view}`).default
-      let component = ReactDOM.render(<Component />, document.getElementsByTagName('body')[0])
+      let component = ReactDOM.render(<Component view_name={view} />, document.getElementsByTagName('body')[0])
       ipc.on('window:set-state', (event, state) => component.setState(state))
       event.sender.send(`window:rendered:${remote.getCurrentWindow().id}`)
       component.initialize(document)

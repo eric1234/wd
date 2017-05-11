@@ -5,47 +5,50 @@ import Clock from '../models/clock'
 
 class Prompt extends Window {
   constructor() {
-    super({
-      view: './prompt', show: false, frame: false, alwaysOnTop: true,
-      center: true, width: 600, height: 300, backgroundColor: '#F1EEF2',
-      icon: `${__dirname}/../icon.png`,
+    super('prompt', {
+      show: false, frame: false,
+      width: 600, height: 300,
+      backgroundColor: '#F1EEF2'
     })
-    this.setMenu(null)
 
-    this.receive('prompt:submit', this.submit)
-    this.receive('prompt:suggestions', this.load_suggestions)
+    this.handle('submit', 'suggestions')
 
     this.interrupter = new Clock(15)
     this.idler = new Clock(1)
   }
 
-  initialize() {
+  // Load last activity so user can simply accept
+  ready() {
     event_store.last_activity().then(value => {
-      this.setState({value: value})
+      this.set_state({value: value})
       this.ask()
     })
   }
 
+  // Public interface for another part of program to request current activity
   ask() {
-    if( this.isVisible() ) return
+    if( this.view.isVisible() ) return
     this.interrupter.reset()
-    this.show()
+    this.view.show()
     this.idler.start(() => event_store.insert_idle())
   }
 
-  submit(value) {
+  // Callback when user submits activity. Send to data store and reset clocks
+  on_submit(value) {
     this.idler.reset()
-    this.hide()
+    this.view.hide()
     this.interrupter.start(() => this.ask())
     event_store.insert_activity(value)
   }
 
-  load_suggestions(value) {
+  // Callback when view needs suggestions from the user. Pull from data store
+  on_suggestions(value) {
     event_store.recent(value).then(recent => {
-      this.webContents.send('prompt:suggestions', recent)
+      this.send('suggestions', recent)
     })
   }
 }
 
+// Singleton instance for rest of app to access
 export let prompt
 app.on('ready', () => prompt = new Prompt())

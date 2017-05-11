@@ -1,12 +1,12 @@
-import { Menu, Tray } from 'electron'
+// NOTE: This module export any variable. Just importing it will activate the
+// single instance which is entirely self-managed
+
+import { Menu, Tray, app } from 'electron'
 import { prompt } from './prompt'
 import Report from './report'
 
-/*
- * Construct a tray icon which then become the launch point for the rest of the
- * application. Expected to only be called once during boot.
- */
-export default function() {
+// Builds tray object
+function build() {
   let tray = new Tray(`${__dirname}/../icon.png`)
   tray.on('click', () => prompt.ask())
   tray.setContextMenu(Menu.buildFromTemplate([
@@ -14,4 +14,9 @@ export default function() {
     { label: 'Report', click: () => new Report() },
     { label: 'Exit', role: 'quit' },
   ]))
+  return tray
 }
+
+// When app is loaded initialize and store outside of callback to preview GC
+let tray
+app.on('ready', () => tray = build())

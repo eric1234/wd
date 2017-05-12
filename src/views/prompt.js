@@ -47,6 +47,6 @@ export default class extends Window {
   }
 
   on_suggestions(suggestions) {
-    this.suggestions = suggestions
+    this.suggestions.list = suggestions
   }
 }

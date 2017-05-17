@@ -74,7 +74,8 @@ export class EventStore {
     // NOTE: We don't use NeDB's LIMIT as it lacks a DISTINCT operator. Since
     // We are filtering and only keep a few days of values it's ok to just load
     // them all and filter here.
-    let query = {'type': 'activity', 'value': {$regex: new RegExp(`^${RegExp.escape(prefix)}`)}}
+    let regex = new RegExp(`^${RegExp.escape(prefix)}`, 'i')
+    let query = {'type': 'activity', 'value': {$regex: regex}}
     let cursor = this.storage.find(query, {'value': 1}).sort({'created_at': -1})
 
     return new Promise((resolve, reject) => {

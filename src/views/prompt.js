@@ -38,7 +38,7 @@ export default class extends Window {
 
   on_autocomplete(event) {
     this.setState({value: event.text.value})
-    this.submit(event)
+    this.on_submit(event)
   }
 
   on_submit(event) {

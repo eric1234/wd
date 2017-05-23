@@ -60,7 +60,8 @@
         "icon": "src/icon.png"
       },
       "electronInstallerRedhat": {
-        "icon": "src/icon.png"
+        "icon": "src/icon.png",
+        "requires": ["lsb", "libXScrnSaver"]
       },
       "github_repository": {
         "owner": "eric1234",

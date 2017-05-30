@@ -1,25 +1,37 @@
 {
   "name": "whatcha-doin",
+  "genericName": "Time Tracker",
   "version": "0.0.1",
   "description": "Keeps track of what your doing by asking you",
   "main": "src/boot.js",
-  "author": "Eric Anderson",
+  "author": {
+    "name": "Eric Anderson",
+    "email": "eric@pixelwareinc.com",
+    "url": "https://github.com/eric1234/wd"
+  },
   "license": "Unlicense",
   "devDependencies": {
     "ava": "^0.19.1",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
+    "babel-preset-react": "^6.24.1",
     "babel-register": "^6.24.1",
-    "electron-prebuilt-compile": "^1.6.2",
+    "electron-prebuilt-compile": "1.6.8",
     "timekeeper": "^1.0.0"
   },
   "dependencies": {
+    "electron-compile": "^6.4.1",
+    "electron-squirrel-startup": "^1.0.0",
     "nedb": "^1.8.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },
   "scripts": {
-    "start": "DB=events.db electron .",
-    "test": "ava"
+    "start": "DB=events.db electron-forge start",
+    "test": "ava",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "ava": {
     "require": [
@@ -35,5 +47,50 @@
     "plugins": [
       "transform-class-properties"
     ]
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "icon": "build/icon.ico",
+        "win32metadata": {
+          "ProductName": "Whatcha Doin",
+          "InternalName": "whatcha-doin",
+          "OriginalFilename": "whatcha-doin",
+          "FileDescription": "Keeps track of what you are doing by asking you",
+          "CompanyName": "Whatcha Doin"
+        }
+      },
+      "electronWinstallerConfig": {
+        "iconUrl": "https://raw.githubusercontent.com/eric1234/wd/packaging/build/icon.ico",
+        "loadingGif": "build/installing.gif"
+      },
+      "electronInstallerDebian": {
+        "icon": "src/icon.png"
+      },
+      "electronInstallerRedhat": {
+        "icon": "src/icon.png",
+        "requires": [
+          "lsb",
+          "libXScrnSaver"
+        ]
+      },
+      "github_repository": {
+        "owner": "eric1234",
+        "name": "wd"
+      },
+      "windowsStoreConfig": {}
+    }
   }
 }

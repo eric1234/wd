@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "electron-compile": "^6.4.1",
+    "electron-squirrel-startup": "^1.0.0",
     "nedb": "^1.8.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
@@ -50,18 +51,40 @@
   "config": {
     "forge": {
       "make_targets": {
-        "win32": ["squirrel"],
-        "darwin": ["zip"],
-        "linux": ["deb", "rpm"]
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
       },
-      "electronPackagerConfig": {},
-      "electronWinstallerConfig": {},
+      "electronPackagerConfig": {
+        "icon": "build/icon.ico",
+        "win32metadata": {
+          "ProductName": "Whatcha Doin",
+          "InternalName": "whatcha-doin",
+          "OriginalFilename": "whatcha-doin",
+          "FileDescription": "Keeps track of what you are doing by asking you",
+          "CompanyName": "Whatcha Doin"
+        }
+      },
+      "electronWinstallerConfig": {
+        "iconUrl": "https://raw.githubusercontent.com/eric1234/wd/packaging/build/icon.ico",
+        "loadingGif": "build/installing.gif"
+      },
       "electronInstallerDebian": {
         "icon": "src/icon.png"
       },
       "electronInstallerRedhat": {
         "icon": "src/icon.png",
-        "requires": ["lsb", "libXScrnSaver"]
+        "requires": [
+          "lsb",
+          "libXScrnSaver"
+        ]
       },
       "github_repository": {
         "owner": "eric1234",
